@@ -18,9 +18,15 @@ export class WebService {
 	private onRequest(request:http.ServerRequest, response:http.ServerResponse): void {
 		this.response = response;
 		var q: url.UrlWithParsedQuery = url.parse(request.url, true);
+		if (q.pathname.length === 1 && q.pathname === "/") {
+			q.pathname = "/index.html";
+		}
 		var filename: string = path.join(__dirname, ".." + q.pathname);
-		console.log("HTTP Request: ", filename);
-		if (filename.indexOf("htm") >= 0) {
+		
+		if(!fs.existsSync(filename)) {
+			this.response.writeHead(400, this.header);
+			this.response.end("404 Not Found");
+		} else {
 			var content: string = fs.readFileSync(filename, 'utf8');
 			this.response.writeHead(200, this.header);
 			this.response.write(content);
