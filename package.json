@@ -5,7 +5,7 @@
 	"main": "./dist/main.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"debug": "node --inspect dist\\main.js"
+		"debug": "tsc && node --inspect dist\\main.js"
 	},
 	"keywords": [],
 	"author": "Vincent Gonzales",
