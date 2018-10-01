@@ -4,8 +4,7 @@ import FileMgr = require('./server/Filemanager');
 
 var webService: Service.WebService = new Service.WebService();
 var fileManager: FileMgr.FileManager = new FileMgr.FileManager();
-if (!fileManager.checkFile('index.html')) {
-	console.log('Copying files!');
-	fileManager.copyDirContent("../../src/web/");
-}
+fileManager.copyDirContent("../../src/web/");
+console.log("Starting file service...");
 webService.start(8081);
+//fileManager.loadDirectory("../");
