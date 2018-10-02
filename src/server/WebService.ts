@@ -5,7 +5,6 @@ import * as path from "path";
 
 export class WebService {
 	private header: http.OutgoingHttpHeaders = {'Content-Type': 'text/html'};
-	private response:http.ServerResponse;
 
 	constructor() { }
 
@@ -16,7 +15,6 @@ export class WebService {
 	}
 
 	private onRequest(request:http.ServerRequest, response:http.ServerResponse): void {
-		this.response = response;
 		var q: url.UrlWithParsedQuery = url.parse(request.url, true);
 		if (q.pathname.length === 1 && q.pathname === "/") {
 			q.pathname = "/index.html";
@@ -24,13 +22,13 @@ export class WebService {
 		var filename: string = path.join(__dirname, ".." + q.pathname);
 		
 		if(!fs.existsSync(filename)) {
-			this.response.writeHead(400, this.header);
-			this.response.end("404 Not Found");
+			response.writeHead(400, this.header);
+			response.end("404 Not Found");
 		} else {
 			var content: string = fs.readFileSync(filename, 'utf8');
-			this.response.writeHead(200, this.header);
-			this.response.write(content);
-			this.response.end();
+			response.writeHead(200, this.header);
+			response.write(content);
+			response.end();
 		}
 	}
 }
