@@ -16,19 +16,34 @@ export class WebService {
 
 	private onRequest(request:http.ServerRequest, response:http.ServerResponse): void {
 		var q: url.UrlWithParsedQuery = url.parse(request.url, true);
-		if (q.pathname.length === 1 && q.pathname === "/") {
-			q.pathname = "/index.html";
-		}
-		var filename: string = path.join(__dirname, ".." + q.pathname);
-		
-		if(!fs.existsSync(filename)) {
-			response.writeHead(400, this.header);
-			response.end("404 Not Found");
+
+		if (request.method === 'GET') {
+			if (q.pathname.length === 1 && q.pathname === "/") {
+				q.pathname = "/index.html";
+			}
+			var filename: string = path.join(__dirname, ".." + q.pathname);
+			
+			if(!fs.existsSync(filename)) {
+				response.writeHead(400, this.header);
+				response.end("404 Not Found");
+			} else {
+				var content: string = fs.readFileSync(filename, 'utf8');
+				response.writeHead(200, this.header);
+				response.write(content);
+				response.end();
+			}
+		} else if (['POST', 'PUT'].indexOf(request.method) > -1) {
+			if (q.path !== '/api') {
+				response.writeHead(400, this.header);
+				response.end("404 Not Found");
+			}
+			response.end(request.method);
 		} else {
-			var content: string = fs.readFileSync(filename, 'utf8');
-			response.writeHead(200, this.header);
-			response.write(content);
-			response.end();
+			response.end('Method not supported!');
 		}
 	}
+	private handleApiRequest(response:http.ServerResponse, q: url.UrlWithParsedQuery, method: string): void {
+			
+	}
+
 }
