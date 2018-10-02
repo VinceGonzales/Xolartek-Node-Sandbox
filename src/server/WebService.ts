@@ -42,8 +42,4 @@ export class WebService {
 			response.end('Method not supported!');
 		}
 	}
-	private handleApiRequest(response:http.ServerResponse, q: url.UrlWithParsedQuery, method: string): void {
-			
-	}
-
 }
