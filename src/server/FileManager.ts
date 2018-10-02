@@ -32,11 +32,9 @@ export class FileManager {
 	private processFile(err:NodeJS.ErrnoException, items: string[]): void {
 		var filepath: string = path.join(__dirname, "../");
 		for (var item of items) {
-			var f: string = path.join(filepath, item);
-			fs.stat(f, (err:NodeJS.ErrnoException, stats: any): void => {
-				console.log(`${item} is ${stats.isFile() ? 'a file' : 'a directory'}`);
-			});
+			let f: fs.PathLike = path.join(filepath, item);
+			let info: fs.Stats = fs.statSync(f);
+			console.log(`${item} is ${info.isFile() ? 'a file' : 'a directory'}`);
 		}
-		console.log("processing...");
 	}
 }
